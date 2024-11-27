@@ -35,7 +35,7 @@ const Calendar = ({ transactions }) => {
     setCurrentDate(newDate);
   };
 
-  // Hàm lấy tổng số tiền giao dịch trong ngày
+  // Hàm lấy tổng thu và chi trong ngày
   const getDayTransactions = (day) => {
     if (!day || !transactions) return null;
     
@@ -51,13 +51,15 @@ const Calendar = ({ transactions }) => {
 
     if (dayTransactions.length === 0) return null;
 
-    const total = dayTransactions.reduce((sum, transaction) => {
-      return transaction.type === 'expense' 
-        ? sum - transaction.amount 
-        : sum + transaction.amount;
-    }, 0);
+    const income = dayTransactions
+      .filter(t => t.amount > 0)
+      .reduce((sum, t) => sum + t.amount, 0);
 
-    return total;
+    const expense = dayTransactions
+      .filter(t => t.amount < 0)
+      .reduce((sum, t) => Math.abs(sum) + Math.abs(t.amount), 0);
+
+    return { income, expense };
   };
 
   return (
@@ -86,15 +88,24 @@ const Calendar = ({ transactions }) => {
           {weeks.map((week, index) => (
             <tr key={index}>
               {week.map((day, i) => {
-                const amount = getDayTransactions(day);
+                const amounts = getDayTransactions(day);
                 return (
                   <td key={i} className={day ? '' : 'empty'}>
                     {day && (
                       <>
                         <div className="day-number">{day}</div>
-                        {amount !== null && (
-                          <div className={`day-amount ${amount < 0 ? 'expense' : 'income'}`}>
-                            {amount.toLocaleString()}đ
+                        {amounts !== null && (
+                          <div className="day-amounts">
+                            {amounts.income > 0 && (
+                              <div className="day-amount income">
+                                +{amounts.income.toLocaleString()}đ
+                              </div>
+                            )}
+                            {amounts.expense > 0 && (
+                              <div className="day-amount expense">
+                                -{amounts.expense.toLocaleString()}đ
+                              </div>
+                            )}
                           </div>
                         )}
                       </>

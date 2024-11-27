@@ -20,6 +20,19 @@ const TransactionList = ({ onEdit }) => {
     return Math.abs(number).toLocaleString('vi-VN');
   };
 
+  const formatDateTime = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleString('vi-VN', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    });
+  };
+
   return (
     <div className="transaction-list">
       <h2>Danh sách giao dịch</h2>
@@ -27,13 +40,17 @@ const TransactionList = ({ onEdit }) => {
         {transactions.map((transaction) => (
           <div key={transaction.id} className="transaction-item">
             <div className="transaction-info">
-              <div className="transaction-date">{transaction.date}</div>
-              <div className="transaction-category">
-                <CategoryIcon category={transaction.category} />
-                {transaction.note && <span className="transaction-note">{transaction.note}</span>}
-              </div>
-              <div className={`transaction-amount ${transaction.amount >= 0 ? 'income' : 'expense'}`}>
-                {transaction.amount >= 0 ? '+' : '-'}{formatNumber(transaction.amount)}đ
+              <div className="transaction-date">{formatDateTime(transaction.date)}</div>
+              <div className="transaction-details">
+                <div className="transaction-main">
+                  <div className="category-with-amount">
+                    <CategoryIcon category={transaction.category} />
+                    <div className={`transaction-amount ${transaction.amount >= 0 ? 'income' : 'expense'}`}>
+                      {transaction.amount >= 0 ? '+' : '-'}{formatNumber(transaction.amount)}đ
+                    </div>
+                  </div>
+                </div>
+                {transaction.note && <div className="transaction-note">{transaction.note}</div>}
               </div>
             </div>
             <div className="transaction-actions">
