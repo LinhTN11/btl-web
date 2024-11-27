@@ -1,3 +1,4 @@
+Nguyen Phuc Lam
 .calendar {
   background-color: #fff;
   padding: 20px;
@@ -14,46 +15,41 @@
   margin-bottom: 20px;
 }
 
-.calendar-header h3 {
-  font-size: 20px;
-  font-weight: bold;
-}
-
 .calendar-header button {
-  background-color: #007bff;
-  color: white;
+  background: none;
   border: none;
-  padding: 5px 10px;
-  border-radius: 5px;
+  font-size: 20px;
   cursor: pointer;
+  padding: 5px 10px;
 }
 
-.calendar-header button:hover {
-  background-color: #0056b3;
+.calendar-header h3 {
+  margin: 0;
+  font-size: 18px;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  text-align: center;
 }
 
 th {
-  background-color: #f8f9fa;
   padding: 10px;
-  font-weight: bold;
+  text-align: center;
+  font-weight: 500;
+  color: #666;
 }
 
 td {
-  height: 80px;
-  border: 1px solid #ddd;
-  vertical-align: top;
   position: relative;
-  padding: 4px;
+  width: calc(100% / 7);
+  padding-top: calc(100% / 7);
+  border: 1px solid #eee;
+  height: 100px; /* Fixed height for the cells */
 }
 
 td.empty {
-  background-color: #f4f4f4;
+  background-color: #f9f9f9;
 }
 
 .day-number {
@@ -64,19 +60,34 @@ td.empty {
   color: #666;
 }
 
-.day-amount {
+.day-amounts {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: 14px;
+  top: 5%; /* Cách 5% từ cạnh trên */
+  bottom: 5%; /* Cách 5% từ cạnh dưới */
+  left: 2%; /* Cách 5% từ cạnh trái */
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  text-align: left; /* Căn chữ sang trái */
+  align-items: flex-start; /* Căn các phần tử con sang bên trái */
+}
+
+
+
+.day-amount {
+  font-size: 12px;
   white-space: nowrap;
+  padding: 2px 4px;
+  border-radius: 4px;
+  margin-bottom: 2px;
 }
 
 .day-amount.income {
   color: #28a745;
+  background-color: rgba(40, 167, 69, 0.1);
 }
 
 .day-amount.expense {
   color: #dc3545;
+  background-color: rgba(220, 53, 69, 0.1);
 }

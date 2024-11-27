@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { addTransaction, updateTransaction } from '../../features/transactionSlice';
@@ -33,10 +34,24 @@ const TransactionNote = ({ onClose, editingTransaction }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const now = new Date();
+    const [dateOnly] = formData.date.split('T');
+    const [year, month, day] = dateOnly.split('-');
+    
+    // Combine selected date with current time
+    const dateWithCurrentTime = new Date(
+      year,
+      month - 1,
+      day,
+      now.getHours(),
+      now.getMinutes(),
+      now.getSeconds()
+    );
+
     const transaction = {
       ...formData,
       amount: parseFloat(formData.amount),
-      date: new Date(formData.date).toISOString(),
+      date: dateWithCurrentTime.toISOString(),
       id: editingTransaction ? editingTransaction.id : Date.now(),
       type: formData.amount >= 0 ? 'income' : 'expense'
     };
