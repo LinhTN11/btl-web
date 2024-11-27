@@ -1,0 +1,82 @@
+.calendar {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  max-width: 900px;
+  margin: 20px auto;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.calendar-header h3 {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.calendar-header button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.calendar-header button:hover {
+  background-color: #0056b3;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+}
+
+th {
+  background-color: #f8f9fa;
+  padding: 10px;
+  font-weight: bold;
+}
+
+td {
+  height: 80px;
+  border: 1px solid #ddd;
+  vertical-align: top;
+  position: relative;
+  padding: 4px;
+}
+
+td.empty {
+  background-color: #f4f4f4;
+}
+
+.day-number {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  font-size: 14px;
+  color: #666;
+}
+
+.day-amount {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.day-amount.income {
+  color: #28a745;
+}
+
+.day-amount.expense {
+  color: #dc3545;
+}
