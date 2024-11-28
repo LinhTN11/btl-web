@@ -28,6 +28,7 @@ const BudgetForm = () => {
     category: 'food',
     startDate,
     endDate,
+    note: '', // Thêm trường ghi chú
   });
 
   useEffect(() => {
@@ -100,6 +101,18 @@ const BudgetForm = () => {
               </div>
             ))}
           </div>
+        </div>
+
+        <div className="form-group">
+          <label>Ghi chú:</label>
+          <input
+            type="text"
+            name="note"
+            value={budgetData.note}
+            onChange={handleInputChange}
+            placeholder="Thêm ghi chú cho ngân sách"
+            className="note-input"
+          />
         </div>
 
         <div className="form-actions">

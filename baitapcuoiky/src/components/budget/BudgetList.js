@@ -33,23 +33,25 @@ const BudgetList = () => {
   const calculateRemainingBudget = (budget) => {
     const startDate = new Date(budget.startDate);
     const endDate = new Date(budget.endDate);
-    
+  
+    // Lọc các giao dịch chi tiêu theo danh mục, loại giao dịch và thời gian
     const categoryTransactions = transactions.filter(transaction => {
       const transactionDate = new Date(transaction.date);
       return (
         transaction.category === budget.category &&
-        transaction.type === 'expense' &&
+        transaction.type === 'expense' &&  // Chỉ lấy giao dịch chi tiêu
         transactionDate >= startDate &&
         transactionDate <= endDate
       );
     });
-
+  
+    // Tính tổng chi tiêu, nhân với -1 để làm cho giá trị chi tiêu là số âm
     const totalSpent = categoryTransactions.reduce((sum, transaction) => 
-      sum + transaction.amount, 0);
-
+      sum + (transaction.amount * -1), 0);  // Nhân với -1 để chi tiêu là số âm
+  
+    // Trả về số dư ngân sách còn lại
     return budget.amount - totalSpent;
   };
-
   const getCategoryIcon = (category) => {
     switch (category) {
       case 'food':
@@ -133,6 +135,11 @@ const BudgetList = () => {
                   {isOverBudget ? 'Vượt ngân sách: ' : 'Còn lại: '}
                   {formatAmount(Math.abs(remainingAmount))}
                 </p>
+                {budget.note && (
+                  <div className="budget-note-tooltip">
+                    {budget.note}
+                  </div>
+                )}
                 <div className="budget-dates">
                   <span>{formatDate(budget.startDate)}</span>
                   <span> - </span>

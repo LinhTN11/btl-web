@@ -34,7 +34,7 @@ library.add(
   faChartLine
 );
 
-const DashboardContent = () => {
+const DashboardContent = ({ onEdit }) => {
   const { transactions, totalExpense } = useSelector((state) => state.transactions);
   return (
     <div className="main-content">
@@ -43,7 +43,7 @@ const DashboardContent = () => {
         <Calendar transactions={transactions} />
       </div>
       <div className="right-content">
-        <TransactionList onEdit={() => {}} />
+        <TransactionList onEdit={onEdit} />
       </div>
     </div>
   );
@@ -53,6 +53,11 @@ const App = () => {
   const [showTransactionNote, setShowTransactionNote] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState(null);
   const navigate = useNavigate();
+
+  const handleEdit = (transaction) => {
+    setEditingTransaction(transaction);
+    setShowTransactionNote(true);
+  };
 
   const handleNavClick = (item) => {
     if (item === 'Ghi chép giao dịch') {
@@ -80,7 +85,7 @@ const App = () => {
         />
       )}
       <Routes>
-        <Route path="/" element={<DashboardContent />} />
+        <Route path="/" element={<DashboardContent onEdit={handleEdit} />} />
         <Route path="/create-budget" element={<BudgetForm />} />
         <Route path="/edit-budget" element={<BudgetForm />} />
         <Route path="/budgets" element={<BudgetList />} />
@@ -89,4 +94,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default App
