@@ -89,6 +89,8 @@
   gap: 8px;
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
+  transform: scale(90%);
+  margin-left: 5%;
 }
 
 .transaction-item:hover .transaction-actions {

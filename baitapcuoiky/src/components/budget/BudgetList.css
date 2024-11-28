@@ -9,9 +9,24 @@
   margin-bottom: 2rem;
 }
 
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .budget-list-header h2 {
   color: #333;
   margin: 0;
+}
+
+.remaining-days {
+  font-weight: bold;
+  color: #2196F3;
+  margin: 0;
+  padding: 8px 16px;
+  background-color: #E3F2FD;
+  border-radius: 8px;
 }
 
 .add-budget-button {
