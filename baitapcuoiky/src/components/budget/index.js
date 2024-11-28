@@ -110,10 +110,12 @@ const BudgetForm = () => {
             name="note"
             value={budgetData.note}
             onChange={handleInputChange}
-            placeholder="Thêm ghi chú cho ngân sách"
+            placeholder="Thêm ghi chú"
             className="note-input"
+            maxLength={200}  // Giới hạn 800 ký tự
           />
         </div>
+
 
         <div className="form-actions">
           <button type="submit" className="submit-button">
