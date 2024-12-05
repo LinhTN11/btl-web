@@ -9,9 +9,24 @@
   margin-bottom: 2rem;
 }
 
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .budget-list-header h2 {
   color: #333;
   margin: 0;
+}
+
+.remaining-days {
+  font-weight: bold;
+  color: #2196F3;
+  margin: 0;
+  padding: 8px 16px;
+  background-color: #E3F2FD;
+  border-radius: 8px;
 }
 
 .add-budget-button {
@@ -78,6 +93,7 @@
 
 .budget-info {
   flex: 1;
+  position: relative;
 }
 
 .budget-info h3 {
@@ -152,4 +168,37 @@
 .delete-button:hover {
   background-color: #ff1744;
   transform: scale(1.1);
+}
+
+.budget-note-tooltip {
+  display: none;
+  position: absolute;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  max-width: 400px;
+  word-wrap: break-word;
+  white-space: normal;
+  z-index: 1000;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 5px;
+}
+
+.budget-info:hover .budget-note-tooltip {
+  display: block;
+}
+
+.budget-note-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -6px;
+  border-width: 6px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
 }

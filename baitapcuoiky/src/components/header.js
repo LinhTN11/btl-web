@@ -1,7 +1,7 @@
 import React from 'react';
 
-const Header = ({ onNavClick }) => {
-  const navItems = ['Tổng quan', 'Số giao dịch', 'Ghi chép giao dịch', 'Ngân sách', 'Đăng nhập'];
+const Header = ({ onNavClick, onLoginClick }) => {
+  const navItems = ['Tổng quan', 'Số giao dịch', 'Ghi chép giao dịch', 'Ngân sách'];
 
   return (
     <header className="header">
@@ -12,6 +12,11 @@ const Header = ({ onNavClick }) => {
               {item}
             </li>
           ))}
+          <li>
+            <button onClick={onLoginClick} className="login-button">
+              Đăng nhập
+            </button>
+          </li>
         </ul>
       </nav>
     </header>

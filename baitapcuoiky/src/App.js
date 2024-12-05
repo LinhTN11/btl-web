@@ -13,13 +13,15 @@ import {
   faStar,
   faChartLine,
 } from '@fortawesome/free-solid-svg-icons';
-import Dashboard from './components/dashboard';
-import Calendar from './components/Calendar';
+import Dashboard from './components/dashboard/dashboard';
+import Calendar from './components/calendar/Calendar';
 import Header from './components/header';
-import TransactionList from './components/TransactionList';
+import TransactionList from './components/transactionlist/TransactionList';
 import TransactionNote from './components/transactionNote/TransactionNote';
 import BudgetForm from './components/budget';
 import BudgetList from './components/budget/BudgetList';
+import Login from './components/login/login';
+import User from './components/userinfor/User';
 import './App.css';
 
 library.add(
@@ -34,7 +36,18 @@ library.add(
   faChartLine
 );
 
-const DashboardContent = () => {
+const DashboardContent = ({ onEdit }) => {
+  return (
+    <div className="main-content">
+      <div className="left-content">
+      </div>
+      <div className="right-content">
+      </div>
+    </div>
+  );
+};
+
+const TransactionContent = ({ onEdit }) => {
   const { transactions, totalExpense } = useSelector((state) => state.transactions);
   return (
     <div className="main-content">
@@ -43,7 +56,7 @@ const DashboardContent = () => {
         <Calendar transactions={transactions} />
       </div>
       <div className="right-content">
-        <TransactionList onEdit={() => {}} />
+        <TransactionList onEdit={onEdit} />
       </div>
     </div>
   );
@@ -52,7 +65,14 @@ const DashboardContent = () => {
 const App = () => {
   const [showTransactionNote, setShowTransactionNote] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState(null);
+  const [showLogin, setShowLogin] = useState(false);
+  const [userEmail, setUserEmail] = useState(null);
   const navigate = useNavigate();
+
+  const handleEdit = (transaction) => {
+    setEditingTransaction(transaction);
+    setShowTransactionNote(true);
+  };
 
   const handleNavClick = (item) => {
     if (item === 'Ghi chép giao dịch') {
@@ -62,6 +82,8 @@ const App = () => {
       navigate('/budgets');
     } else if (item === 'Tổng quan') {
       navigate('/');
+    } else if (item === 'Số giao dịch') {
+      navigate('/transactions');
     }
   };
 
@@ -70,17 +92,42 @@ const App = () => {
     setEditingTransaction(null);
   };
 
+  const handleLoginSuccess = (email) => {
+    setUserEmail(email);
+  };
+
+  const handleLogout = () => {
+    setUserEmail(null);
+  };
+
   return (
     <div className="app">
-      <Header onNavClick={handleNavClick} />
+      <Header 
+        onNavClick={handleNavClick} 
+        onLoginClick={() => setShowLogin(true)}
+        userEmail={userEmail}
+        onLogout={handleLogout}
+        editingTransaction={editingTransaction}
+        showTransactionNote={showTransactionNote}
+        onCloseTransactionNote={handleCloseTransactionNote}
+      />
+      {userEmail && (
+        <User email={userEmail} onLogout={handleLogout} />
+      )}
       {showTransactionNote && (
         <TransactionNote 
           onClose={handleCloseTransactionNote}
           editingTransaction={editingTransaction}
         />
       )}
+      <Login 
+        isOpen={showLogin} 
+        onClose={() => setShowLogin(false)}
+        onLoginSuccess={handleLoginSuccess}
+      />
       <Routes>
-        <Route path="/" element={<DashboardContent />} />
+        <Route path="/" element={<DashboardContent onEdit={handleEdit} />} />
+        <Route path="/transactions" element={<TransactionContent onEdit={handleEdit} />} />
         <Route path="/create-budget" element={<BudgetForm />} />
         <Route path="/edit-budget" element={<BudgetForm />} />
         <Route path="/budgets" element={<BudgetList />} />

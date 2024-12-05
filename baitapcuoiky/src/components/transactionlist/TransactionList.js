@@ -1,9 +1,9 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteTransaction } from '../features/transactionSlice';
+import { deleteTransaction } from '../../features/transactionSlice';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import CategoryIcon from './CategoryIcon';
+import CategoryIcon from '../CategoryIcon';
 import './TransactionList.css';
 
 const TransactionList = ({ onEdit }) => {

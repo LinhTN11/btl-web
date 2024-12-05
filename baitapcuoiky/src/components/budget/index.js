@@ -11,12 +11,24 @@ const BudgetForm = () => {
   const location = useLocation();
   const editingBudget = location.state?.budget;
 
+  const getCurrentMonthDates = () => {
+    const now = new Date();
+    const startDate = now.toISOString().split('T')[0];
+    const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    const endDate = lastDay.toISOString().split('T')[0];
+    
+    const remainingDays = Math.ceil((lastDay - now) / (1000 * 60 * 60 * 24));
+    return { startDate, endDate, remainingDays };
+  };
+
+  const { startDate, endDate} = getCurrentMonthDates();
+
   const [budgetData, setBudgetData] = useState({
-    name: '',
     amount: '',
     category: 'food',
-    startDate: '',
-    endDate: '',
+    startDate,
+    endDate,
+    note: '', // Thêm trường ghi chú
   });
 
   useEffect(() => {
@@ -64,18 +76,6 @@ const BudgetForm = () => {
       <h2>{editingBudget ? 'Chỉnh sửa ngân sách' : 'Tạo ngân sách mới'}</h2>
       <form onSubmit={handleSubmit} className="budget-form">
         <div className="form-group">
-          <label>Tên ngân sách:</label>
-          <input
-            type="text"
-            name="name"
-            value={budgetData.name}
-            onChange={handleInputChange}
-            required
-            placeholder="Nhập tên ngân sách"
-          />
-        </div>
-
-        <div className="form-group">
           <label>Số tiền:</label>
           <input
             type="number"
@@ -104,32 +104,25 @@ const BudgetForm = () => {
         </div>
 
         <div className="form-group">
-          <label>Thời gian:</label>
-          <div className="date-inputs">
-            <input
-              type="date"
-              name="startDate"
-              value={budgetData.startDate}
-              onChange={handleInputChange}
-              required
-            />
-            <span>đến</span>
-            <input
-              type="date"
-              name="endDate"
-              value={budgetData.endDate}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
+          <label>Ghi chú:</label>
+          <input
+            type="text"
+            name="note"
+            value={budgetData.note}
+            onChange={handleInputChange}
+            placeholder="Thêm ghi chú"
+            className="note-input"
+            maxLength={200}  // Giới hạn 800 ký tự
+          />
         </div>
 
+
         <div className="form-actions">
-          <button type="button" onClick={() => navigate('/budgets')} className="cancel-button">
-            Hủy
-          </button>
           <button type="submit" className="submit-button">
-            {editingBudget ? 'Lưu thay đổi' : 'Tạo ngân sách'}
+            {editingBudget ? 'Cập nhật' : 'Tạo mới'}
+          </button>
+          <button type="button" className="cancel-button" onClick={() => navigate('/budgets')}>
+            Hủy
           </button>
         </div>
       </form>

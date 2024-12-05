@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,27 +11,47 @@ const BudgetList = () => {
   const transactions = useSelector((state) => state.transactions.transactions);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [remainingDays, setRemainingDays] = useState(0);
+
+  useEffect(() => {
+    const updateRemainingDays = () => {
+      const now = new Date();
+      const lastDay = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+      const days = Math.ceil((lastDay - now) / (1000 * 60 * 60 * 24));
+      setRemainingDays(days);
+    };
+
+    // Update immediately
+    updateRemainingDays();
+
+    // Update every minute
+    const interval = setInterval(updateRemainingDays, 60000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const calculateRemainingBudget = (budget) => {
     const startDate = new Date(budget.startDate);
     const endDate = new Date(budget.endDate);
-    
+  
+    // Lọc các giao dịch chi tiêu theo danh mục, loại giao dịch và thời gian
     const categoryTransactions = transactions.filter(transaction => {
       const transactionDate = new Date(transaction.date);
       return (
         transaction.category === budget.category &&
-        transaction.type === 'expense' &&
+        transaction.type === 'expense' &&  // Chỉ lấy giao dịch chi tiêu
         transactionDate >= startDate &&
         transactionDate <= endDate
       );
     });
-
+  
+    // Tính tổng chi tiêu, nhân với -1 để làm cho giá trị chi tiêu là số âm
     const totalSpent = categoryTransactions.reduce((sum, transaction) => 
-      sum + transaction.amount, 0);
-
+      sum + (transaction.amount * -1), 0);  // Nhân với -1 để chi tiêu là số âm
+  
+    // Trả về số dư ngân sách còn lại
     return budget.amount - totalSpent;
   };
-
   const getCategoryIcon = (category) => {
     switch (category) {
       case 'food':
@@ -44,6 +64,21 @@ const BudgetList = () => {
         return 'shopping-bag';
       default:
         return 'ellipsis-h';
+    }
+  };
+
+  const getCategoryName = (category) => {
+    switch (category) {
+      case 'food':
+        return 'Ăn uống';
+      case 'transport':
+        return 'Di chuyển';
+      case 'entertainment':
+        return 'Giải trí';
+      case 'shopping':
+        return 'Mua sắm';
+      default:
+        return 'Khác';
     }
   };
 
@@ -73,12 +108,15 @@ const BudgetList = () => {
     <div className="budget-list-container">
       <div className="budget-list-header">
         <h2>Danh sách ngân sách</h2>
-        <button 
-          className="add-budget-button"
-          onClick={() => navigate('/create-budget')}
-        >
-          <FontAwesomeIcon icon={faPlus} />
-        </button>
+        <div className="header-right">
+          <p className="remaining-days">Còn lại {remainingDays} ngày trong tháng</p>
+          <button 
+            className="add-budget-button"
+            onClick={() => navigate('/create-budget')}
+          >
+            <FontAwesomeIcon icon={faPlus} />
+          </button>
+        </div>
       </div>
       <div className="budget-grid">
         {budgets.map((budget) => {
@@ -91,12 +129,17 @@ const BudgetList = () => {
                 <FontAwesomeIcon icon={getCategoryIcon(budget.category)} />
               </div>
               <div className="budget-info">
-                <h3>{budget.name}</h3>
+                <h3>{getCategoryName(budget.category)}</h3>
                 <p className="budget-amount">{formatAmount(budget.amount)}</p>
                 <p className={`remaining-amount ${isOverBudget ? 'over-budget' : ''}`}>
                   {isOverBudget ? 'Vượt ngân sách: ' : 'Còn lại: '}
                   {formatAmount(Math.abs(remainingAmount))}
                 </p>
+                {budget.note && (
+                  <div className="budget-note-tooltip">
+                    {budget.note}
+                  </div>
+                )}
                 <div className="budget-dates">
                   <span>{formatDate(budget.startDate)}</span>
                   <span> - </span>
