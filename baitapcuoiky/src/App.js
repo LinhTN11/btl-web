@@ -22,6 +22,7 @@ import BudgetForm from './components/budget';
 import BudgetList from './components/budget/BudgetList';
 import Login from './components/login/login';
 import User from './components/userinfor/User';
+import OverAll from './components/overall/OverAll';
 import './App.css';
 
 library.add(
@@ -39,10 +40,7 @@ library.add(
 const DashboardContent = ({ onEdit }) => {
   return (
     <div className="main-content">
-      <div className="left-content">
-      </div>
-      <div className="right-content">
-      </div>
+      <OverAll />
     </div>
   );
 };
@@ -81,7 +79,7 @@ const App = () => {
     } else if (item === 'Ngân sách') {
       navigate('/budgets');
     } else if (item === 'Tổng quan') {
-      navigate('/');
+      navigate('/overall');
     } else if (item === 'Số giao dịch') {
       navigate('/transactions');
     }
@@ -127,6 +125,7 @@ const App = () => {
       />
       <Routes>
         <Route path="/" element={<DashboardContent onEdit={handleEdit} />} />
+        <Route path="/overall" element={<OverAll />} />
         <Route path="/transactions" element={<TransactionContent onEdit={handleEdit} />} />
         <Route path="/create-budget" element={<BudgetForm />} />
         <Route path="/edit-budget" element={<BudgetForm />} />
@@ -136,4 +135,4 @@ const App = () => {
   );
 };
 
-export default App
+export default App;

@@ -8,7 +8,31 @@ import './TransactionList.css';
 
 const TransactionList = ({ onEdit }) => {
   const transactions = useSelector((state) => state.transactions.transactions);
+  const selectedMonth = useSelector((state) => state.calendar.selectedMonth);
   const dispatch = useDispatch();
+
+  // Filter transactions for the selected month
+  const currentMonthTransactions = transactions.filter(transaction => {
+    const transactionDate = new Date(transaction.date);
+    const selectedDate = new Date(selectedMonth);
+    return (
+      transactionDate.getMonth() === selectedDate.getMonth() &&
+      transactionDate.getFullYear() === selectedDate.getFullYear()
+    );
+  });
+
+  // Calculate totals for the current month
+  const { totalIncome, totalExpense } = currentMonthTransactions.reduce(
+    (acc, transaction) => {
+      if (transaction.amount >= 0) {
+        acc.totalIncome += parseFloat(transaction.amount);
+      } else {
+        acc.totalExpense += Math.abs(parseFloat(transaction.amount));
+      }
+      return acc;
+    },
+    { totalIncome: 0, totalExpense: 0 }
+  );
 
   const handleDelete = (id) => {
     if (window.confirm('Bạn có chắc chắn muốn xóa giao dịch này?')) {
@@ -36,8 +60,18 @@ const TransactionList = ({ onEdit }) => {
   return (
     <div className="transaction-list">
       <h2>Danh sách giao dịch</h2>
+      <div className="transaction-summary">
+        <div className="summary-item income">
+          <span>Tổng thu tháng {new Date(selectedMonth).getMonth() + 1}:</span>
+          <span className="amount">+{formatNumber(totalIncome)}đ</span>
+        </div>
+        <div className="summary-item expense">
+          <span>Tổng chi tháng {new Date(selectedMonth).getMonth() + 1}:</span>
+          <span className="amount">-{formatNumber(totalExpense)}đ</span>
+        </div>
+      </div>
       <div className="transaction-items">
-        {transactions.map((transaction) => (
+        {currentMonthTransactions.map((transaction) => (
           <div key={transaction.id} className="transaction-item">
             <div className="transaction-info">
               <div className="transaction-date">{formatDateTime(transaction.date)}</div>

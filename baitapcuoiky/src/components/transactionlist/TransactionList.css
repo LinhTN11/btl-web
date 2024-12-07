@@ -153,3 +153,37 @@
 .delete-btn:hover {
   background-color: #c82333;
 }
+
+.transaction-summary {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-around;
+  gap: 20px;
+}
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.summary-item span {
+  font-size: 1rem;
+}
+
+.summary-item .amount {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.summary-item.income .amount {
+  color: #28a745;
+}
+
+.summary-item.expense .amount {
+  color: #dc3545;
+}

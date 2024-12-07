@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { setSelectedMonth } from '../../features/calendarSlice';
 import './Calendar.css'
 
 const Calendar = ({ transactions }) => {
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const dispatch = useDispatch();
+  const currentDate = useSelector((state) => state.calendar.selectedMonth);
 
-  const year = currentDate.getFullYear();
-  const month = currentDate.getMonth();
+  const date = new Date(currentDate);
+  const year = date.getFullYear();
+  const month = date.getMonth();
 
   // Tính ngày đầu tiên và số ngày trong tháng
   const firstDayOfMonth = new Date(year, month, 1).getDay();
@@ -32,7 +36,7 @@ const Calendar = ({ transactions }) => {
   // Hàm chuyển tháng
   const changeMonth = (direction) => {
     const newDate = new Date(year, month + direction);
-    setCurrentDate(newDate);
+    dispatch(setSelectedMonth(newDate.toISOString()));
   };
 
   // Hàm lấy tổng thu và chi trong ngày
@@ -67,7 +71,7 @@ const Calendar = ({ transactions }) => {
       <div className="calendar-header">
         <button onClick={() => changeMonth(-1)}>❮</button>
         <h3>
-          {currentDate.toLocaleString('default', { month: 'long' })} {year}
+          {new Date(currentDate).toLocaleString('default', { month: 'long', year: 'numeric' })}
         </h3>
         <button onClick={() => changeMonth(1)}>❯</button>
       </div>
