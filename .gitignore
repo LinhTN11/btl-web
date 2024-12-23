@@ -1,0 +1,8 @@
+# Windows
+*.log
+node_modules/
+.env
+.DS_Store
+build/
+dist/
+coverage/
